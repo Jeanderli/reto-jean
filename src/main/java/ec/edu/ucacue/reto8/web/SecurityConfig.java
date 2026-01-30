@@ -22,12 +22,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // IMPORTANTE para evitar bloqueos raros en Railway
+            // 🔴 IMPORTANTE: sin esto, Railway suele dar comportamientos raros
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
-
-                // 🔓 Recursos públicos
+                // recursos públicos
                 .requestMatchers(
                     "/login",
                     "/css/**",
@@ -37,7 +36,7 @@ public class SecurityConfig {
                     "/errores/**"
                 ).permitAll()
 
-                // 🟢 Páginas principales (USER y ADMIN)
+                // vistas principales (USER y ADMIN)
                 .requestMatchers(
                     "/",
                     "/combustible",
@@ -47,14 +46,14 @@ public class SecurityConfig {
                     "/reporteVehiculo"
                 ).hasAnyRole("USER", "ADMIN")
 
-                // 🟢 CRUD (DEJADO ABIERTO PARA USER y ADMIN PARA QUE FUNCIONE)
+                // acciones CRUD → SOLO ADMIN
                 .requestMatchers(
                     "/registroUsuario",
                     "/nuevo**",
                     "/guardar**",
                     "/editar**/**",
                     "/eliminar**/**"
-                ).hasAnyRole("USER", "ADMIN")
+                ).hasRole("ADMIN")
 
                 .anyRequest().authenticated()
             )
