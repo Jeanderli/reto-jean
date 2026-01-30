@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <header th:replace="layout/plantilla::header"></header>
+
+    <table id="combustible" th:fragment="tabla_combustible" class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>[[#{combustible.conductor}]]</th>
+                <th>[[#{combustible.placa}]]</th>
+                <th>[[#{combustible.reconocimiento}]]</th>
+                <th>[[#{combustible.documento}]]</th>                    
+                <th>[[#{combustible.combustibleTipo}]]</th>
+                <th>[[#{combustible.detalle}]]</th>
+                <th>[[#{combustible.recargas}]]</th>
+                <th>[[#{combustible.cantidad}]]</th>
+                <th>[[#{combustible.precio}]]</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="combustible : ${combustibles}">
+                <td th:text="${combustible.conductor.nombre}">Mostrar conductor</td>
+                <td th:text="${combustible.placa}">Mostrar placa</td>
+                <td th:text="${combustible.reconocimiento}">Mostrar reconocimiento</td>
+                <td th:text="${combustible.documento}">Mostrar documento</td>
+                <td th:text="${combustible.combustibleTipo}">Mostrar combustibleTipo</td>
+                <td th:text="${combustible.detalle}">Mostrar detalle</td>
+                <td th:text="${combustible.recargas}">Mostrar recargas</td>
+                <td th:text="${combustible.cantidad}">Mostrar cantidad</td>
+                <td th:text="${combustible.precio}">Mostrar precio</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+                    <a th:href="@{/editarCombustible/{idCombustible}(idCombustible=${combustible.idCombustible})}"
+                       class="btn btn-secondary btn-sm me-2">
+                        <i class="fas fa-edit"></i> [[#{accion.editar}]]
+                    </a>
+                    <a th:href="@{/eliminarCombustible/{idCombustible}(idCombustible=${combustible.idCombustible})}"
+                       class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    
+    
+    <table id="informacion" th:fragment="tabla_informacion" class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>[[#{informacion.conductor}]]</th>
+                <th>[[#{informacion.placa}]]</th>
+                <th>[[#{informacion.reconocimiento}]]</th>
+                <th>[[#{informacion.marca}]]</th>                    
+                <th>[[#{informacion.modelo}]]</th>
+                <th>[[#{informacion.aniomodelo}]]</th>
+                <th>[[#{informacion.valoresSRI}]]</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="informacion : ${informacion}">
+                <td th:text="${informacion.conductor.nombre}"></td>
+                <td th:text="${informacion.placa}"></td>
+                <td th:text="${informacion.reconocimiento}"></td>
+                <td th:text="${informacion.marca}"></td>
+                <td th:text="${informacion.modelo}"></td>
+                <td th:text="${informacion.anioModelo}"></td>
+                <td th:text="${informacion.valoresPagarSRI}"></td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+                    <a th:href="@{/editarInformacion/{idInformacion}(idInformacion=${informacion.idInformacion})}"
+                       class="btn btn-secondary btn-sm me-2">
+                        <i class="fas fa-edit"></i> [[#{accion.editar}]]
+                    </a>
+                    <a th:href="@{/eliminarInformacion/{idInformacion}(idInformacion=${informacion.idInformacion})}"
+                       class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="layout/plantilla::head">
+        <title>Datos del Combustible</title>
+        <meta charset="UTF-8"/>
+    </head>
+
+    <body>
+        <header th:replace="layout/plantilla::header"></header>
+
+        <section class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header bg-warning text-white">
+                                <h4 class="mb-0"><i class="fas fa-edit"></i> Datos del Combustible - Editando</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                    <ul class="mb-0">
+                                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+                                <form th:action="@{/guardarCombustible}" method="post" th:object="${combustible}">
+                                    <input type="hidden" th:field="*{idCombustible}"/>
+
+                                    <div class="mb-3">
+                                        <label for="conductor" class="form-label">[[#{combustible.conductor}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <select id="conductor" th:field="*{conductor}" class="form-select" required>
+                                                <option value="" disabled selected>Seleccione un conductor</option>
+                                                <option th:each="conductor : ${conductores}"
+                                                        th:value="${conductor.idConductores}"
+                                                        th:text="${conductor.nombre}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="placa" class="form-label">[[#{combustible.placa}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-car"></i></span>
+                                            <input type="text" id="placa" name="placa" th:field="*{placa}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="reconocimiento" class="form-label">[[#{combustible.reconocimiento}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                                            <input type="text" id="reconocimiento" name="reconocimiento" th:field="*{reconocimiento}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="documento" class="form-label">[[#{combustible.documento}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                                            <input type="text" id="documento" name="documento" th:field="*{documento}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="combustibleTipo" class="form-label">[[#{combustible.combustibleTipo}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-gas-pump"></i></span>
+                                            <input type="text" id="combustibleTipo" name="combustibleTipo" th:field="*{combustibleTipo}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="detalle" class="form-label">[[#{combustible.detalle}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                                            <input type="text" id="detalle" name="detalle" th:field="*{detalle}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="recargas" class="form-label">[[#{combustible.recargas}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-sync-alt"></i></span>
+                                            <input type="text" id="recargas" name="recargas" th:field="*{recargas}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="cantidad" class="form-label">[[#{combustible.cantidad}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-sort-numeric-up"></i></span>
+                                            <input type="text" id="cantidad" name="cantidad" th:field="*{cantidad}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="precio" class="form-label">[[#{combustible.precio}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            <input type="text" id="precio" name="precio" th:field="*{precio}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-warning" name="guardar" th:text="#{accion.guardar}">Guardar</button>
+                                    </div>
+                                </form>
+                                <div class="text-end">
+                                <a th:href="@{/combustible}" class="btn btn-secondary mt-3">[[#{accion.regresar}]]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer th:replace="layout/plantilla::footer"></footer>
+    </body>
+</html>

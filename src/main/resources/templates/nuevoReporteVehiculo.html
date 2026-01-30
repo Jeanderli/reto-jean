@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="layout/plantilla::head">
+        <title>Datos de Reporte Vehicular</title>
+        <meta charset="UTF-8"/>
+    </head>
+
+    <body>
+        <header th:replace="layout/plantilla::header"></header>
+
+        <section class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header bg-warning text-white">
+                                <h4 class="mb-0"><i class="fas fa-edit"></i> Datos del Reporte Vehicular</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                    <ul class="mb-0">
+                                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+                                <form th:action="@{/guardarReporteVehiculo}" method="post" th:object="${reporteVehiculo}">
+                                    <input type="hidden" th:field="*{idReporteVehiculo}"/>
+                                    
+                                    <div class="mb-3">
+                                        <label for="conductor" class="form-label">[[#{reporteVehiculo.conductor}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <select id="conductor" th:field="*{conductor}" class="form-select" required>
+                                                <option value="" disabled selected>Seleccione un conductor</option>
+                                                <option th:each="conductor : ${conductores}"
+                                                        th:value="${conductor.idConductores}"
+                                                        th:text="${conductor.nombre}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="placa" class="form-label">[[#{reporteVehiculo.placa}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-car"></i></span>
+                                            <input type="text" id="placa" name="placa" th:field="*{placa}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="horaInicial" class="form-label">[[#{reporteVehiculo.horaInicial}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                            <input type="text" id="horaInicial" name="horaInicial" th:field="*{horaInicial}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="kmInicial" class="form-label">[[#{reporteVehiculo.kmInicial}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-tachometer-alt"></i></span>
+                                            <input type="text" id="kmInicial" name="kmInicial" th:field="*{kmInicial}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="numCombustibleI" class="form-label">[[#{reporteVehiculo.numCombustibleI}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-gas-pump"></i></span>
+                                            <input type="text" id="numCombustibleI" name="numCombustibleI" th:field="*{numCombustibleI}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="reconocimientoI" class="form-label">[[#{reporteVehiculo.reconocimientoI}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                                            <input type="text" id="reconocimientoI" name="reconocimientoI" th:field="*{reconocimientoI}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="horaFinal" class="form-label">[[#{reporteVehiculo.horaFinal}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                            <input type="text" id="horaFinal" name="horaFinal" th:field="*{horaFinal}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="numCombustibleF" class="form-label">[[#{reporteVehiculo.numCombustibleF}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-gas-pump"></i></span>
+                                            <input type="text" id="numCombustibleF" name="numCombustibleF" th:field="*{numCombustibleF}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="reconocimientoF" class="form-label">[[#{reporteVehiculo.reconocimientoF}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                                            <input type="text" id="reconocimientoF" name="reconocimientoF" th:field="*{reconocimientoF}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="totalKm_Dia" class="form-label">[[#{reporteVehiculo.totalKm_Dia}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-route"></i></span>
+                                            <input type="text" id="totalKm_Dia" name="totalKm_Dia" th:field="*{totalKm_Dia}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="observaciones" class="form-label">[[#{reporteVehiculo.observaciones}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-comment-dots"></i></span>
+                                            <input type="text" id="observaciones" name="observaciones" th:field="*{observaciones}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="recoconocimiento_Vehiculo" class="form-label">[[#{reporteVehiculo.recoconocimiento_Vehiculo}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-car-side"></i></span>
+                                            <input type="text" id="recoconocimiento_Vehiculo" name="recoconocimiento_Vehiculo" th:field="*{recoconocimiento_Vehiculo}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-warning" name="guardar" th:text="#{accion.guardar}">Guardar</button>
+                                    </div>
+                                </form>
+                                <div class="text-end">
+                                <a th:href="@{/reporteVehiculo}" class="btn btn-secondary mt-3">[[#{accion.regresar}]]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer th:replace="layout/plantilla::footer"></footer>
+    </body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="layout/plantilla::head">
+        <title>Datos de Mantenimiento</title>
+        <meta charset="UTF-8"/>
+        
+    </head>
+    
+    <body>
+        <header th:replace="layout/plantilla::header"></header>
+        <section class="py-4 mb-4 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-warning text-white">
+                        <h4 class="mb-0"><i class="fas fa-edit"></i> Datos de Mantenimiento</h4>
+                    </div>
+                            <div class="card-body">
+                                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                    <ul class="mb-0">
+                                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+                        <form th:action="@{/guardarMantenimiento}" method="post" th:object="${mantenimiento}">
+                            <input type="hidden" th:field="*{idMantenimiento}"/>
+
+                            <div class="mb-3">
+                                <label for="conductor" class="form-label">[[#{mantenimiento.conductor}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <select id="conductor" th:field="*{conductor}" class="form-select" required>
+                                        <option value="" disabled selected>Seleccione un conductor</option>
+                                        <option th:each="conductor : ${conductores}"
+                                                th:value="${conductor.idConductores}"
+                                                th:text="${conductor.nombre}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="placa" class="form-label">[[#{mantenimiento.placa}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-car"></i></span>
+                                    <input type="text" id="placa" name="placa" th:field="*{placa}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="reconocimiento" class="form-label">[[#{mantenimiento.reconocimiento}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                                    <input type="text" id="reconocimiento" name="reconocimiento" th:field="*{reconocimiento}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="documento" class="form-label">[[#{mantenimiento.documento}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                                    <input type="text" id="documento" name="documento" th:field="*{documento}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="detalle" class="form-label">[[#{mantenimiento.detalle}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                                    <input type="text" id="detalle" name="detalle" th:field="*{detalle}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">[[#{mantenimiento.cantidad}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-sort-numeric-up"></i></span>
+                                    <input type="text" id="cantidad" name="cantidad" th:field="*{cantidad}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="precio" class="form-label">[[#{mantenimiento.precio}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                    <input type="text" id="precio" name="precio" th:field="*{precio}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recargas" class="form-label">[[#{mantenimiento.recargas}]]:</label>
+                                <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-gas-pump"></i></span>
+                                    <input type="text" id="recargas" name="recargas" th:field="*{recargas}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="totalFactura" class="form-label">[[#{mantenimiento.totalFactura}]]:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-file-invoice-dollar"></i></span>
+                                    <input type="text" id="totalFactura" name="totalFactura" th:field="*{totalFactura}" class="form-control" required/>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-warning" name="guardar" th:text="#{accion.guardar}">
+                                    <i class="fas fa-save"></i> Guardar
+                                </button>
+                            </div>
+                        </form>
+                        <div class="text-end">
+                        <a th:href="@{/mantenimiento}" class="btn btn-secondary mt-3">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    </body>
+</html>

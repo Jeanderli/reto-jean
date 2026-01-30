@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+    <head th:replace="layout/plantilla::head">
+        <title>Informacion</title>
+        <meta charset="UTF-8">
+    </head>
+
+    <body>
+        <header th:replace="layout/plantilla::header"></header>
+        <section class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h1 class="mb-3">[[#{informacion.informacion}]]</h1>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button onclick="descargarPDF()" class="btn btn-outline-secondary me-2">
+                            <i class="fas fa-file-pdf"></i> [[#{accion.descargarPDF}]]
+                        </button>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/nuevoInformacion}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> [[#{accion.nuevo}]]
+                        </a>
+                    </div>
+                </div>
+
+                <div th:if="${informacion != null and !informacion.empty}">
+                    <div class="table-responsive">
+                        <table th:replace="layout/tablas::tabla_informacion"></table> 
+                    </div>
+                </div>
+
+                <div th:if="${informacion == null or informacion.empty}" class="alert alert-info" role="alert">
+                    [[#{informacion.lista-vacia}]]
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="layout/plantilla::footer"></footer>
+         <script>
+            async function descargarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text("Reporte de Tabla", 14, 15);
+
+            doc.autoTable({
+            html: '#informacion',  // toma directamente la tabla HTML
+            startY: 20,
+            styles: {
+            fontSize: 5,
+            cellPadding: 3
+            },
+            headStyles: {
+            fillColor: [22, 160, 133] // color turquesa
+            }
+            });
+
+            doc.save("tabla.pdf");
+            }
+        </script>
+    </body>
+
+</html>

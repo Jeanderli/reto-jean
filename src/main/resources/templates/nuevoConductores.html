@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="layout/plantilla::head">
+        <title>Datos de Conductores</title>
+        <meta charset="UTF-8"/>
+
+    </head>
+
+    <body>
+        <header th:replace="layout/plantilla::header"></header>
+        <section class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header bg-warning text-white">
+                                <h4 class="mb-0"><i class="fas fa-edit"></i> Datos de los Conductores</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                    <ul class="mb-0">
+                                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+                                <form th:action="@{/guardarConductores}" method="post" th:object="${conductor}">
+                                    <input type="hidden" th:field="*{idConductores}"/>
+
+                                    <div class="mb-3">
+                                        <label for="nombre" class="form-label">[[#{conductor.nombre}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <input type="text" id="nombre" name="nombre" th:field="*{nombre}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="reconocimiento" class="form-label">[[#{conductor.reconocimiento}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                                            <input type="text" id="reconocimiento" name="reconocimiento" th:field="*{reconocimiento}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="kminicial" class="form-label">[[#{conductor.kminicial}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-tachometer-alt"></i></span>
+                                            <input type="text" id="kminicial" name="kminicial" th:field="*{kminicial}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="numCombustible" class="form-label">[[#{conductor.numCombustible}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-gas-pump"></i></span>
+                                            <input type="text" id="numCombustible" name="numCombustible" th:field="*{numCombustible}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="dia" class="form-label">[[#{conductor.dia}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                                            <input type="text" id="dia" name="dia" th:field="*{dia}" class="form-control" required/>            
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="horaIngreso" class="form-label">[[#{conductor.horaIngreso}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                            <input type="text" id="horaIngreso" name="horaIngreso" th:field="*{horaIngreso}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="horaSalida" class="form-label">[[#{conductor.horaSalida}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-sign-out-alt"></i></span>
+                                            <input type="text" id="horaSalida" name="horaSalida" th:field="*{horaSalida}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="adelantos" class="form-label">[[#{conductor.adelantos}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-hand-holding-usd"></i></span>
+                                            <input type="text" id="adelantos" name="adelantos" th:field="*{adelantos}" class="form-control" required/>           
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="novedades" class="form-label">[[#{conductor.novedades}]]:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-exclamation-circle"></i></span>
+                                            <input type="text" id="novedades" name="novedades" th:field="*{novedades}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-warning" name="guardar" th:text="#{accion.guardar}">Guardar</button>
+                                    </div>
+                                </form>
+                                <div class="text-end">
+                                <a th:href="@{/conductores}" class="btn btn-secondary mt-3">[[#{accion.regresar}]]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

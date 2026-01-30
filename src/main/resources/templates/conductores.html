@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <head th:replace="layout/plantilla::head">
+        <title>Conductores</title>
+        <meta charset="UTF-8">
+    </head>
+
+    <body>
+        <header th:replace="layout/plantilla::header"></header>
+
+        <section class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h1 class="mb-3">[[#{conductor.conductores}]]</h1>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button onclick="descargarPDF()" class="btn btn-outline-secondary me-2">
+                            <i class="fas fa-file-pdf"></i> [[#{accion.descargarPDF}]]
+                        </button>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/nuevoConductores}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> [[#{accion.nuevo}]]
+                        </a>
+                    </div>
+                </div>
+
+                <div th:if="${conductores != null and !conductores.empty}">
+                    <div class="table-responsive">
+                        <table id="conductores" class="table table-striped table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>[[#{conductor.nombre}]]</th>
+                                    <th>[[#{conductor.reconocimiento}]]</th>
+                                    <th>[[#{conductor.kminicial}]]</th>
+                                    <th>[[#{conductor.numCombustible}]]</th>
+                                    <th>[[#{conductor.dia}]]</th>
+                                    <th>[[#{conductor.horaIngreso}]]</th>
+                                    <th>[[#{conductor.horaSalida}]]</th>
+                                    <th>[[#{conductor.adelantos}]]</th>
+                                    <th>[[#{conductor.novedades}]]</th>
+                                    <th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="conductor : ${conductores}">
+                                    <td th:text="${conductor.nombre}"></td>
+                                    <td th:text="${conductor.reconocimiento}"></td>
+                                    <td th:text="${conductor.kminicial}"></td>
+                                    <td th:text="${conductor.numCombustible}"></td>
+                                    <td th:text="${conductor.dia}"></td>
+                                    <td th:text="${conductor.horaIngreso}"></td>
+                                    <td th:text="${conductor.horaSalida}"></td>
+                                    <td th:text="${conductor.adelantos}"></td>
+                                    <td th:text="${conductor.novedades}"></td>
+                                    <td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+                                        <a th:href="@{/editarConductores/{idConductores}(idConductores=${conductor.idConductores})}"
+                                           class="btn btn-secondary btn-sm me-2">
+                                            <i class="fas fa-edit"></i> [[#{accion.editar}]]
+                                        </a>
+                                        <a th:href="@{/eliminarConductores/{idConductores}(idConductores=${conductor.idConductores})}"
+                                           class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div th:if="${conductores == null or conductores.empty}" class="alert alert-info" role="alert">
+                    [[#{conductor.lista-vacia}]]
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="layout/plantilla::footer"></footer>
+        <script>
+            async function descargarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text("Reporte de Tabla", 14, 15);
+
+            doc.autoTable({
+            html: '#conductores',  // toma directamente la tabla HTML
+            startY: 20,
+            styles: {
+            fontSize: 5,
+            cellPadding: 3
+            },
+            headStyles: {
+            fillColor: [22, 160, 133] // color turquesa
+            }
+            });
+
+            doc.save("tabla.pdf");
+            }
+        </script>
+    </body>
+
+</html>

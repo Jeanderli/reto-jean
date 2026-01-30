@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/plantilla::head">
+    <title>Registro de Usuario</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header th:replace="layout/plantilla::header"></header>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow rounded">
+                    <div class="card-body">
+                        <h2 class="mb-4 text-center">[[#{registroUsuario.registroNuevoUsuario}]]</h2>
+
+                        <form th:action="@{/registroUsuario}" th:object="${usuario}" method="post">
+                            <!-- Campo de Usuario -->
+                            <div class="mb-3">
+                                <label class="form-label">[[#{registroUsuario.nombreDeUsuario}]]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" th:field="*{username}" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <!-- Campo de Contraseña -->
+                            <div class="mb-3">
+                                <label class="form-label">[[#{registroUsuario.contraseña}]]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" th:field="*{password}" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <!-- Campo de Rol -->
+                            <div class="mb-3">
+                                <label class="form-label">[[#{registroUsuario.selecionRol}]]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user-tag"></i>
+                                    </span>
+                                    <select th:field="*{roles[0].nombre}" class="form-select">
+                                        <option value="ROLE_USER">[[#{registroUsuario.usuario}]]</option>
+                                        <option value="ROLE_ADMIN">[[#{registroUsuario.administrador}]]</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Botón Registrar -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-2"></i> Registrar
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla::footer"></footer>
+</body>
+</html>
+

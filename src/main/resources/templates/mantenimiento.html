@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <head th:replace="layout/plantilla::head">
+        <title>Mantenimiento</title>
+        <meta charset="UTF-8">
+    </head>
+
+    <body>
+        <header th:replace="layout/plantilla::header"></header>
+
+        <section class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h1 class="mb-3">[[#{mantenimiento.mantenimiento}]]</h1>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button onclick="descargarPDF()" class="btn btn-outline-secondary me-2">
+                            <i class="fas fa-file-pdf"></i> [[#{accion.descargarPDF}]]
+                        </button>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/nuevoMantenimiento}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> [[#{accion.nuevo}]]
+                        </a>
+                    </div>
+                </div>
+
+                <div th:if="${mantenimientos != null and !mantenimientos.empty}">
+                    <div class="table-responsive">
+                        <table id="mantenimiento" class="table table-striped table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>[[#{mantenimiento.conductor}]]</th>
+                                    <th>[[#{mantenimiento.placa}]]</th>
+                                    <th>[[#{mantenimiento.reconocimiento}]]</th>
+                                    <th>[[#{mantenimiento.documento}]]</th>
+                                    <th>[[#{mantenimiento.detalle}]]</th>
+                                    <th>[[#{mantenimiento.cantidad}]]</th>
+                                    <th>[[#{mantenimiento.precio}]]</th>
+                                    <th>[[#{mantenimiento.recargas}]]</th>
+                                    <th>[[#{mantenimiento.totalFactura}]]</th>
+                                    <th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="mantenimiento : ${mantenimientos}">
+                                    <td th:text="${mantenimiento.conductor.nombre}"></td>
+                                    <td th:text="${mantenimiento.placa}"></td>
+                                    <td th:text="${mantenimiento.reconocimiento}"></td>
+                                    <td th:text="${mantenimiento.documento}"></td>
+                                    <td th:text="${mantenimiento.detalle}"></td>
+                                    <td th:text="${mantenimiento.cantidad}"></td>
+                                    <td th:text="${mantenimiento.precio}"></td>
+                                    <td th:text="${mantenimiento.recargas}"></td>
+                                    <td th:text="${mantenimiento.totalFactura}"></td>
+                                    <td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+                                        <a th:href="@{/editarMantenimiento/{idMantenimiento}(idMantenimiento=${mantenimiento.idMantenimiento})}"
+                                           class="btn btn-secondary btn-sm me-2">
+                                            <i class="fas fa-edit"></i> [[#{accion.editar}]]
+                                        </a>
+                                        <a th:href="@{/eliminarMantenimiento/{idMantenimiento}(idMantenimiento=${mantenimiento.idMantenimiento})}"
+                                           class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div th:if="${mantenimientos == null or mantenimientos.empty}" class="alert alert-info" role="alert">
+                    [[#{mantenimiento.lista-vacia}]]
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="layout/plantilla::footer"></footer>
+        <script>
+            async function descargarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text("Reporte de Tabla", 14, 15);
+
+            doc.autoTable({
+            html: '#mantenimiento',  // toma directamente la tabla HTML
+            startY: 20,
+            styles: {
+            fontSize: 5,
+            cellPadding: 3
+            },
+            headStyles: {
+            fillColor: [22, 160, 133] // color turquesa
+            }
+            });
+
+            doc.save("tabla.pdf");
+            }
+        </script>
+    </body>
+</html>
