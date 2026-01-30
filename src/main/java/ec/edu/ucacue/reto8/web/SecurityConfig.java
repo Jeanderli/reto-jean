@@ -22,12 +22,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/login", "/img/**", "/resources/**").permitAll() // Permitir acceso a login y recursos estáticos
-                .requestMatchers("/registroUsuario", "/editar/*", "/agregar/", "/eliminar/*").hasRole("ADMIN") // Restricción de acceso por rol
-                .requestMatchers("/").hasAnyRole("USER", "ADMIN") // Acceso a usuarios autenticados
-                .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
-                )
+               .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+    .requestMatchers("/login", "/img/**", "/resources/**", "/css/**", "/js/**").permitAll()
+
+    // RUTAS PARA USER y ADMIN
+    .requestMatchers(
+        "/",
+        "/combustible",
+        "/conductores",
+        "/informacion",
+        "/mantenimiento",
+        "/reporteVehiculo"
+    ).hasAnyRole("USER", "ADMIN")
+
+    // SOLO ADMIN (ajusté tus patrones para que sí agarren)
+    .requestMatchers(
+        "/registroUsuario",
+        "/editar/**",
+        "/agregar/**",
+        "/eliminar/**"
+    ).hasRole("ADMIN")
+
+    .anyRequest().authenticated()
+)
+
                 .formLogin(formLogin -> formLogin
                 .loginPage("/login") // Página de login personalizada
                 .defaultSuccessUrl("/", true) // Redirigir después del login exitoso
