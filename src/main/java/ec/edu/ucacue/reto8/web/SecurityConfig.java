@@ -1,65 +1,80 @@
 package ec.edu.ucacue.reto8.web;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
     private final UserDetailsService userDetailsService;
+
     public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
-               .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-    .requestMatchers("/login", "/img/**", "/resources/**", "/css/**", "/js/**").permitAll()
+            // 🔴 IMPORTANTE: sin esto, Railway suele dar comportamientos raros
+            .csrf(csrf -> csrf.disable())
 
-    // RUTAS PARA USER y ADMIN
-    .requestMatchers(
-        "/",
-        "/combustible",
-        "/conductores",
-        "/informacion",
-        "/mantenimiento",
-        "/reporteVehiculo"
-    ).hasAnyRole("USER", "ADMIN")
+            .authorizeHttpRequests(auth -> auth
+                // recursos públicos
+                .requestMatchers(
+                    "/login",
+                    "/css/**",
+                    "/js/**",
+                    "/img/**",
+                    "/resources/**",
+                    "/errores/**"
+                ).permitAll()
 
-    // SOLO ADMIN (ajusté tus patrones para que sí agarren)
-    .requestMatchers(
-        "/registroUsuario",
-        "/editar/**",
-        "/agregar/**",
-        "/eliminar/**"
-    ).hasRole("ADMIN")
+                // vistas principales (USER y ADMIN)
+                .requestMatchers(
+                    "/",
+                    "/combustible",
+                    "/conductores",
+                    "/informacion",
+                    "/mantenimiento",
+                    "/reporteVehiculo"
+                ).hasAnyRole("USER", "ADMIN")
 
-    .anyRequest().authenticated()
-)
+                // acciones CRUD → SOLO ADMIN
+                .requestMatchers(
+                    "/registroUsuario",
+                    "/nuevo**",
+                    "/guardar**",
+                    "/editar**/**",
+                    "/eliminar**/**"
+                ).hasRole("ADMIN")
 
-                .formLogin(formLogin -> formLogin
-                .loginPage("/login") // Página de login personalizada
-                .defaultSuccessUrl("/", true) // Redirigir después del login exitoso
-                .permitAll() // Permitir acceso al formulario de login
-                )
-                .logout(logout -> logout
+                .anyRequest().authenticated()
+            )
+
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+            )
+
+            .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-                )
-                .exceptionHandling(exceptionHandling -> exceptionHandling
+            )
+
+            .exceptionHandling(ex -> ex
                 .accessDeniedPage("/errores/403")
-                );
+            );
+
         return http.build();
     }
 
@@ -68,28 +83,11 @@ public class SecurityConfig {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-        
         return authProvider;
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
-    
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return new InMemoryUserDetailsManager(
-//                User.withUsername("admin")
-//                        .password("{noop}123")
-//                        .roles("ADMIN", "USER")
-//                        .build(),
-//                User.withUsername("user")
-//                        .password("{noop}123")
-//                        .roles("USER")
-//                        .build()
-//        );
-//    }
-    
-    
 }
