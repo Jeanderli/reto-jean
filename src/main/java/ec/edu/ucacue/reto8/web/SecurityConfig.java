@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -22,11 +22,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // 🔴 IMPORTANTE: sin esto, Railway suele dar comportamientos raros
+            // IMPORTANTE para evitar bloqueos raros en Railway
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
-                // recursos públicos
+
+                // 🔓 Recursos públicos
                 .requestMatchers(
                     "/login",
                     "/css/**",
@@ -36,7 +37,7 @@ public class SecurityConfig {
                     "/errores/**"
                 ).permitAll()
 
-                // vistas principales (USER y ADMIN)
+                // 🟢 Páginas principales (USER y ADMIN)
                 .requestMatchers(
                     "/",
                     "/combustible",
@@ -46,14 +47,14 @@ public class SecurityConfig {
                     "/reporteVehiculo"
                 ).hasAnyRole("USER", "ADMIN")
 
-                // acciones CRUD → SOLO ADMIN
+                // 🟢 CRUD (DEJADO ABIERTO PARA USER y ADMIN PARA QUE FUNCIONE)
                 .requestMatchers(
                     "/registroUsuario",
                     "/nuevo**",
                     "/guardar**",
                     "/editar**/**",
                     "/eliminar**/**"
-                ).hasRole("ADMIN")
+                ).hasAnyRole("USER", "ADMIN")
 
                 .anyRequest().authenticated()
             )
